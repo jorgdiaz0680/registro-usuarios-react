@@ -1,8 +1,23 @@
 import { useState, useEffect } from "react";
 import "./RegistroUsuario.css";
+import hero from "./assets/hero.png"; // Imagen importada desde src/assets
 
 // Confirmado con tus capturas: tu backend corre en el puerto 5001.
 const API_URL = "http://127.0.0.1:5001";
+
+// Datos para los selects dependientes: la lista de ciudades cambia según el país
+const PAISES_CIUDADES = {
+  "República Dominicana": [
+    "Santo Domingo",
+    "Santiago",
+    "La Vega",
+    "Puerto Plata",
+    "San Cristóbal",
+    "San Pedro de Macorís",
+  ],
+  "Estados Unidos": ["Nueva York", "Miami", "Boston", "Los Ángeles"],
+  "España": ["Madrid", "Barcelona", "Valencia", "Sevilla"],
+};
 
 export default function RegistroUsuario() {
   const [nombre, setNombre] = useState("");
@@ -11,6 +26,8 @@ export default function RegistroUsuario() {
   const [clave, setClave] = useState("");
   const [telefono, setTelefono] = useState("");
   const [edad, setEdad] = useState("");
+  const [pais, setPais] = useState("");
+  const [ciudad, setCiudad] = useState("");
 
   const [errores, setErrores] = useState({});
   const [cargando, setCargando] = useState(false);
@@ -60,6 +77,12 @@ export default function RegistroUsuario() {
     }
   };
 
+  // Al cambiar el país, reinicia la ciudad (porque las opciones cambian)
+  const manejarCambioPais = (e) => {
+    setPais(e.target.value);
+    setCiudad("");
+  };
+
   const manejarEnvio = async (e) => {
     e.preventDefault();
     setErrores({});
@@ -99,6 +122,8 @@ export default function RegistroUsuario() {
       setClave("");
       setTelefono("");
       setEdad("");
+      setPais("");
+      setCiudad("");
       cargarUsuarios(); // refresca la lista con el usuario recién creado
     } catch (error) {
       setMensaje("No se pudo conectar con el servidor");
@@ -110,6 +135,7 @@ export default function RegistroUsuario() {
   return (
     <div className="contenedor">
       <form onSubmit={manejarEnvio} className="tarjeta formulario">
+        <img src={hero} alt="Registro de usuarios" className="imagen-hero" />
         <h2>Crear usuario</h2>
 
         <div className="campo">
@@ -169,6 +195,34 @@ export default function RegistroUsuario() {
             onChange={(e) => setEdad(e.target.value)}
           />
         </div>
+
+        <div className="campo">
+          <label>País</label>
+          <select value={pais} onChange={manejarCambioPais}>
+            <option value="">Selecciona un país</option>
+            {Object.keys(PAISES_CIUDADES).map((p) => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="campo">
+          <label>Ciudad</label>
+          <select
+            value={ciudad}
+            onChange={(e) => setCiudad(e.target.value)}
+            disabled={!pais}
+          >
+            <option value="">
+              {pais ? "Selecciona una ciudad" : "Primero elige un país"}
+            </option>
+            {(PAISES_CIUDADES[pais] || []).map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+
+        <img src="/icons.svg" alt="" className="icono-public" />
 
         <button type="submit" disabled={cargando}>
           {cargando ? "Enviando..." : "Registrarse"}

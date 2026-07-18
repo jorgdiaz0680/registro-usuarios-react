@@ -156,6 +156,45 @@ tr:last-child td {
   border-bottom: none;
 }
 
+.imagen-hero {
+  width: 100%;
+  max-height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.icono-public {
+  width: 28px;
+  height: 28px;
+  display: block;
+  margin: 4px 0 16px 0;
+  opacity: 0.6;
+}
+
+.campo select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #111827;
+}
+
+.campo select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.campo select:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
 .boton-eliminar {
   padding: 6px 12px;
   background: #fef2f2;
